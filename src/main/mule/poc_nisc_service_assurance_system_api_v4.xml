@@ -1,0 +1,495 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd ">
+    <http:listener-config name="poc_nisc_service_assurance_system_api_v4-httpListenerConfig">
+        <http:listener-connection host="0.0.0.0" port="8081" />
+    </http:listener-config>
+    <apikit:config name="poc_nisc_service_assurance_system_api_v4-config" raml="poc_nisc_service_assurance_system_api_v4.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+    <flow name="poc_nisc_service_assurance_system_api_v4-main">
+        <http:listener config-ref="poc_nisc_service_assurance_system_api_v4-httpListenerConfig" path="/api/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:router config-ref="poc_nisc_service_assurance_system_api_v4-config" />
+        <error-handler>
+            <on-error-propagate type="APIKIT:BAD_REQUEST">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Bad request"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">400</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_FOUND">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Resource not found"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">404</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:METHOD_NOT_ALLOWED">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Method not allowed"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">405</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_ACCEPTABLE">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Not acceptable"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">406</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:UNSUPPORTED_MEDIA_TYPE">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Unsupported media type"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">415</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_IMPLEMENTED">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Not Implemented"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">501</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+        </error-handler>
+    </flow>
+    <flow name="poc_nisc_service_assurance_system_api_v4-console">
+        <http:listener config-ref="poc_nisc_service_assurance_system_api_v4-httpListenerConfig" path="/console/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:console config-ref="poc_nisc_service_assurance_system_api_v4-config" />
+        <error-handler>
+            <on-error-propagate type="APIKIT:NOT_FOUND">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Resource not found"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">404</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+        </error-handler>
+    </flow>
+    <flow name="get:\network\service:poc_nisc_service_assurance_system_api_v4-config">
+        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+[
+  {
+    id: "problemxxxx0000",
+    correlationId: "xxxxxx",
+    originatingSystem: "System_001",
+    category: "supplier.originated",
+    href: "http://api/serviceProblem/problemxxxx0000",
+    impactImportanceFactor: "0",
+    priority: 1,
+    description: "connection failure between Tokyo and Osaka",
+    problemEscalation: "0",
+    timeRaised: "2016-07-20T00:00:00Z",
+    timeChanged: "2016-07-20T00:00:00Z",
+    statusChangeDate: "2016-07-20T00:00:00Z",
+    statusChangeReason: "problem analysis has been completed in NP1",
+    resolutionDate: "2016-07-20T00:00:00Z",
+    status: "resolved",
+    reason: "Failure of resource â€˜NP1_Resource_1â€™ in NP1",
+    firstAlert: {
+      "type": "Trouble Ticket",
+      id: "NP1_TT_0000000",
+      href: "http://api/troubletiket/NP1_TT_000000",
+      "@type": "Trouble Ticket"
+    },
+    relatedParty: [
+      {
+        role: "Network Provider",
+        id: "NP1",
+        href: "http://api/party/NP1"
+      }, 
+      {
+        role: "Service Provider",
+        id: "SP1",
+        href: "http://api/party/SP1"
+      }, 
+      {
+        role: "Service Provider",
+        id: "SP3",
+        href: "http://api/party/SP3"
+      }
+    ],
+    affectedLocation: [
+      {
+        id: "Loc000000",
+        href: "http://api/location/Loc000000/",
+        name: "string",
+        role: "string",
+        "@type": "string"
+      }, 
+      {
+        id: "Loc000001",
+        href: "http://api/location/Loc000001/",
+        name: "string",
+        role: "string",
+        "@type": "string"
+      }
+    ],
+    underlyingAlarm: [
+      {
+        id: "NP1_A_0000000",
+        href: "http://api/alarm/NP1_A_000000",
+        changeRequest: {
+          href: "string",
+          id: "string",
+          "@referredType": "string"
+        },
+        "@referredType": "string"
+      }
+    ],
+    relatedEvent: [
+      {
+        eventType: "prediction",
+        eventTime: "2014-12-20T17:00:00Z",
+        href: "http://api/event/prediction_0001",
+        id: "prediction_0001",
+        "@referredType": "string"
+      }
+    ],
+    relatedObject: [
+      {
+        id: "product0001",
+        href: "http://api/productinventory/product0001",
+        "type": "string",
+        "@referredType": "string"
+      }
+    ],
+    parentProblem: [
+      {
+        id: "problemxxxx0001",
+        correlationId: "xxxxxxxx",
+        href: "http://api/serviceproblem/problemxxxx0001",
+        "@referredType": "string"
+      }
+    ],
+    underlyingProblem: [
+      {
+        id: "problemxxxx0001",
+        correlationId: "xxxxxxxx",
+        href: "http://api/serviceproblem/problemxxxx0001",
+        "@referredType": "string"
+      }
+    ],
+    trackingRecord: [
+      {
+        description: "yyy cleared the problem",
+        id: "string",
+        systemId: "xxxx",
+        time: "2016-07-20T00:00:00Z",
+        user: "NP1",
+        extensionInfo: [
+          {
+            name: "string",
+            value: "string",
+            "@type": "string"
+          }
+        ],
+        "@type": "string",
+        "@schemaLocation": "string",
+        "@baseType": "string"
+      }
+    ],
+    comment: [
+      {
+        user: "SPM_handler_01",
+        time: "2016-07-20T00:00:00Z",
+        systemId: "System_002",
+        comment: "receive trouble ticket from NP1, and create this Service Problem",
+        "@type": "string"
+      }, 
+      {
+        user: "NP1",
+        time: "2016-07-20T00:00:00Z",
+        systemId: "System_002",
+        comment: "status changed to Progress-Held",
+        "@type": "string"
+      }
+    ],
+    impactPatterns: {
+      description: "string",
+      extensionInfo: [
+        {
+          name: "string",
+          value: "string",
+          "@type": "string"
+        }
+      ],
+      "@type": "string"
+    },
+    extensionInfo: [
+      {
+        name: "",
+        value: "",
+        "@type": "string"
+      }
+    ],
+    links: [
+      {
+        rel: "/linkrels/network/service/info",
+        uri: "/network/service/problemxxxx0000",
+        method: "GET"
+      }, 
+      {
+        rel: "/linkrels/network/service/updateInfo",
+        uri: "/network/service/problemxxxx0000",
+        method: "PUT"
+      }, 
+      {
+        rel: "/linkrels/network/service/delete",
+        uri: "/network/service/problemxxxx0000",
+        method: "DELETE"
+      }
+    ]
+  }
+]]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="get:\network\service\(id):poc_nisc_service_assurance_system_api_v4-config">
+        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core">
+            <ee:variables>
+                <ee:set-variable variableName="id">attributes.uriParams.id</ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  id: "problemxxxx0000",
+  correlationId: "xxxxxx",
+  originatingSystem: "System_001",
+  category: "supplier.originated",
+  href: "http://api/serviceProblem/problemxxxx0000",
+  impactImportanceFactor: "0",
+  priority: 1,
+  description: "connection failure between Tokyo and Osaka",
+  problemEscalation: "0",
+  timeRaised: "2016-07-20T00:00:00Z",
+  timeChanged: "2016-07-20T00:00:00Z",
+  statusChangeDate: "2016-07-20T00:00:00Z",
+  statusChangeReason: "problem analysis has been completed in NP1",
+  resolutionDate: "2016-07-20T00:00:00Z",
+  status: "resolved",
+  reason: "Failure of resource â€˜NP1_Resource_1â€™ in NP1",
+  firstAlert: {
+    "type": "Trouble Ticket",
+    id: "NP1_TT_0000000",
+    href: "http://api/troubletiket/NP1_TT_000000",
+    "@type": "Trouble Ticket"
+  },
+  relatedParty: [
+    {
+      role: "Network Provider",
+      id: "NP1",
+      href: "http://api/party/NP1"
+    }, 
+    {
+      role: "Service Provider",
+      id: "SP1",
+      href: "http://api/party/SP1"
+    }, 
+    {
+      role: "Service Provider",
+      id: "SP3",
+      href: "http://api/party/SP3"
+    }
+  ],
+  affectedLocation: [
+    {
+      id: "Loc000000",
+      href: "http://api/location/Loc000000/",
+      name: "string",
+      role: "string",
+      "@type": "string"
+    }, 
+    {
+      id: "Loc000001",
+      href: "http://api/location/Loc000001/",
+      name: "string",
+      role: "string",
+      "@type": "string"
+    }
+  ],
+  underlyingAlarm: [
+    {
+      id: "NP1_A_0000000",
+      href: "http://api/alarm/NP1_A_000000",
+      changeRequest: {
+        href: "string",
+        id: "string",
+        "@referredType": "string"
+      },
+      "@referredType": "string"
+    }
+  ],
+  relatedEvent: [
+    {
+      eventType: "prediction",
+      eventTime: "2014-12-20T17:00:00Z",
+      href: "http://api/event/prediction_0001",
+      id: "prediction_0001",
+      "@referredType": "string"
+    }
+  ],
+  relatedObject: [
+    {
+      id: "product0001",
+      href: "http://api/productinventory/product0001",
+      "type": "string",
+      "@referredType": "string"
+    }
+  ],
+  parentProblem: [
+    {
+      id: "problemxxxx0001",
+      correlationId: "xxxxxxxx",
+      href: "http://api/serviceproblem/problemxxxx0001",
+      "@referredType": "string"
+    }
+  ],
+  underlyingProblem: [
+    {
+      id: "problemxxxx0001",
+      correlationId: "xxxxxxxx",
+      href: "http://api/serviceproblem/problemxxxx0001",
+      "@referredType": "string"
+    }
+  ],
+  trackingRecord: [
+    {
+      description: "yyy cleared the problem",
+      id: "string",
+      systemId: "xxxx",
+      time: "2016-07-20T00:00:00Z",
+      user: "NP1",
+      extensionInfo: [
+        {
+          name: "string",
+          value: "string",
+          "@type": "string"
+        }
+      ],
+      "@type": "string",
+      "@schemaLocation": "string",
+      "@baseType": "string"
+    }
+  ],
+  comment: [
+    {
+      user: "SPM_handler_01",
+      time: "2016-07-20T00:00:00Z",
+      systemId: "System_002",
+      comment: "receive trouble ticket from NP1, and create this Service Problem",
+      "@type": "string"
+    }, 
+    {
+      user: "NP1",
+      time: "2016-07-20T00:00:00Z",
+      systemId: "System_002",
+      comment: "status changed to Progress-Held",
+      "@type": "string"
+    }
+  ],
+  impactPatterns: {
+    description: "string",
+    extensionInfo: [
+      {
+        name: "string",
+        value: "string",
+        "@type": "string"
+      }
+    ],
+    "@type": "string"
+  },
+  extensionInfo: [
+    {
+      name: "",
+      value: "",
+      "@type": "string"
+    }
+  ],
+  links: [
+    {
+      rel: "/linkrels/network/service/info",
+      uri: "/network/service/problemxxxx0000",
+      method: "GET"
+    }, 
+    {
+      rel: "/linkrels/network/service/updateInfo",
+      uri: "/network/service/problemxxxx0000",
+      method: "PUT"
+    }, 
+    {
+      rel: "/linkrels/network/service/delete",
+      uri: "/network/service/problemxxxx0000",
+      method: "DELETE"
+    }
+  ]
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+</mule>

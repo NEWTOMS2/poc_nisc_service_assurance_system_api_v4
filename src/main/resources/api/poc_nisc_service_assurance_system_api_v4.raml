@@ -1,0 +1,71 @@
+#%RAML 1.0
+baseUri: https://mocksvc.mulesoft.com/mocks/6dde2a33-95f9-40af-9e39-5bd333a79c52 # 
+title: POC NISC Service Assurance System API
+version: 1.0.0
+protocols: [HTTP, HTTPS]
+mediaType: application/json
+
+uses: 
+  commonLibrary: exchange_modules/newtoms-api-common-library.raml
+  errorLibrary: exchange_modules/newtoms-api-error-message-library.raml
+  serviceProblemLibrary: exchange_modules/poc_nisc_service_problem_mgn_library.raml
+
+types: 
+  ServiceProblemAndLinks:
+    type: serviceProblemLibrary.ServiceProblem
+    properties: 
+      links:
+        type: commonLibrary.resourceLinks
+
+/network:
+  /service:
+    get:
+      displayName: Get Network Services
+      description: Get a list of Network Services by specific search.
+      is: [commonLibrary.orderable: {fieldsList: "ServiceId"}, commonLibrary.pageable, errorLibrary.errorHandleable]
+      queryParameters: 
+        Status: 
+          displayName: Network Services Status
+          description: Query all Network Services base on status
+          type: string
+          example: resolved
+          required: false
+        category: 
+          displayName: Network Services category
+          description: Query all Network Services base on category
+          type: string
+          example: supplier.originated
+          required: false
+        priority: 
+          displayName: Network Services priority problem
+          description: Query all Network Services base on priority
+          type: integer
+          example: 1
+          required: false
+        originatingSystem: 
+          displayName: Network Services Originating System
+          description: Query all Network Services base on Originating System
+          type: string
+          example: System_001
+          required: false
+      responses: 
+        200:
+          description: Return a list of Netwok Services
+          body: 
+            application/json:
+              type: array
+              items: 
+                type: ServiceProblemAndLinks
+              example: !include examples/NetworkServicesMessage.json
+    /{id}:
+      get:
+        displayName: Get Network Service
+        description: Get full Network Services data by id.
+        is: [commonLibrary.orderable: {fieldsList: "ServiceId"}, commonLibrary.pageable, errorLibrary.errorHandleable]
+        responses: 
+          200:
+            description: The requested Network Service Information
+            body: 
+              application/json:
+                type: ServiceProblemAndLinks
+                example: !include examples/NetworkServiceMessage.json

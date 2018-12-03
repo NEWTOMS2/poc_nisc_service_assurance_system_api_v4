@@ -1,0 +1,640 @@
+#%RAML 1.0 Library
+types:
+  ServiceProblem:
+    description: The problem information for Middle B which is abstracted in the service layer from the issued event information by First B
+    type: object
+    properties:
+      affectingServiceNumber:
+        description: Number of affected services
+        type: integer
+        required: false
+      category:
+        description: 'Classifier for the problem. Settable. For example, this is used for distinguish the category of problem originator in [role].[category] format. Example: serviceProvider.declarer, supplier.originated, system.originated'
+        type: string
+      correlationId:
+        description: Additional identifier coming from an external system
+        type: string
+        required: false
+      description:
+        description: Free form text describing the Service Problem
+        type: string
+      href:
+        description: Reference to the Service Problem
+        type: string
+        required: false
+      id:
+        description: Identifier of the service problem
+        type: string
+        required: false
+      impactImportanceFactor:
+        description: 'Impact Importance is characterized by an Impact Importance Factor: overall importance of the impact of all the affected services, e.g. 0 (zero impact) to 100 (worst impact). The Impact Importance is a calculated field which is set by the OSS determining the impact.'
+        type: string
+        required: false
+      originatingSystem:
+        description: Indicates where the problem was generated
+        type: string
+      priority:
+        description: An indication varying from 1(highest) to 10(lowest) of how important it is for the service provider to correct the Service Problem.
+        type: integer
+      problemEscalation:
+        description: 'Indicates if this service problem has been escalated or not. Possible values are 0 to 10. A value of zero means no escalation. The meanings of values 1-10 are to be determined by the user of the interface, but they show increasing levels of escalation.'
+        type: string
+        required: false
+      reason:
+        description: Free text or optionally structured text. It can be Unknown.
+        type: string
+      resolutionDate:
+        description: Time the problem was resolved
+        type: datetime
+        required: false
+      status:
+        description: 'The current status of the service problem. Possible values are Submitted, Rejected, Acknowledged, In Progress [Held, Pending], Resolved, Closed, and Cancelled.'
+        type: string
+        required: false
+      statusChangeDate:
+        description: Time the problem was last status changed
+        type: datetime
+        required: false
+      statusChangeReason:
+        description: The reason of state change
+        type: string
+        required: false
+      timeChanged:
+        description: Time the problem was last changed
+        type: datetime
+        required: false
+      timeRaised:
+        description: Time the problem was raised
+        type: datetime
+        required: false
+      trackingRecord:
+        type: array
+        items:
+          type: TrackingRecord
+        required: false
+      firstAlert:
+        type: FirstAlert
+        required: false
+      extensionInfo:
+        description: A generic list of any type of elements. Used for vendor Extensions or loose element encapsulation from other namespaces
+        type: array
+        items:
+          type: ExtensionInfo
+        required: false
+      relatedParty:
+        type: array
+        items:
+          type: RelatedPartyRef
+        required: false
+      underlyingProblem:
+        type: array
+        items:
+          type: RelatedServiceProblemRef
+        required: false
+      underlyingAlarm:
+        type: array
+        items:
+          type: ResourceAlarmRef
+        required: false
+      relatedEvent:
+        type: array
+        items:
+          type: EventRef
+        required: false
+      impactPatterns:
+        type: ImpactPattern
+        required: false
+      parentProblem:
+        type: array
+        items:
+          type: RelatedServiceProblemRef
+        required: false
+      affectedLocation:
+        type: array
+        items:
+          type: Place
+        required: false
+      comment:
+        type: array
+        items:
+          type: Comment
+        required: false
+      relatedObject:
+        type: array
+        items:
+          type: RelatedObjectRef
+        required: false
+      '@type':
+        description: The class type of the actual resource (for type extension).
+        type: string
+        required: false
+      '@schemaLocation':
+        description: A link to the schema describing a resource (for type extension).
+        type: string
+        required: false
+      '@baseType':
+        description: The base type for use in polymorphic collections
+        type: string
+        required: false
+  ServiceProblem_Create:
+    description: |-
+      The problem information for Middle B which is abstracted in the service layer from the issued event information by First B
+      Skipped properties: id,href
+    type: object
+    properties:
+      affectingServiceNumber:
+        description: Number of affected services
+        type: integer
+        required: false
+      category:
+        description: 'Classifier for the problem. Settable. For example, this is used for distinguish the category of problem originator in [role].[category] format. Example: serviceProvider.declarer, supplier.originated, system.originated'
+        type: string
+      correlationId:
+        description: Additional identifier coming from an external system
+        type: string
+        required: false
+      description:
+        description: Free form text describing the Service Problem
+        type: string
+      impactImportanceFactor:
+        description: 'Impact Importance is characterized by an Impact Importance Factor: overall importance of the impact of all the affected services, e.g. 0 (zero impact) to 100 (worst impact). The Impact Importance is a calculated field which is set by the OSS determining the impact.'
+        type: string
+        required: false
+      originatingSystem:
+        description: Indicates where the problem was generated
+        type: string
+      priority:
+        description: An indication varying from 1(highest) to 10(lowest) of how important it is for the service provider to correct the Service Problem.
+        type: integer
+      problemEscalation:
+        description: 'Indicates if this service problem has been escalated or not. Possible values are 0 to 10. A value of zero means no escalation. The meanings of values 1-10 are to be determined by the user of the interface, but they show increasing levels of escalation.'
+        type: string
+        required: false
+      reason:
+        description: Free text or optionally structured text. It can be Unknown.
+        type: string
+      resolutionDate:
+        description: Time the problem was resolved
+        type: datetime
+        required: false
+      status:
+        description: 'The current status of the service problem. Possible values are Submitted, Rejected, Acknowledged, In Progress [Held, Pending], Resolved, Closed, and Cancelled.'
+        type: string
+        required: false
+      statusChangeDate:
+        description: Time the problem was last status changed
+        type: datetime
+        required: false
+      statusChangeReason:
+        description: The reason of state change
+        type: string
+        required: false
+      timeChanged:
+        description: Time the problem was last changed
+        type: datetime
+        required: false
+      timeRaised:
+        description: Time the problem was raised
+        type: datetime
+        required: false
+      trackingRecord:
+        type: array
+        items:
+          type: TrackingRecord
+        required: false
+      firstAlert:
+        type: FirstAlert
+        required: false
+      extensionInfo:
+        description: A generic list of any type of elements. Used for vendor Extensions or loose element encapsulation from other namespaces
+        type: array
+        items:
+          type: ExtensionInfo
+        required: false
+      relatedParty:
+        type: array
+        items:
+          type: RelatedPartyRef
+        required: false
+      underlyingProblem:
+        type: array
+        items:
+          type: RelatedServiceProblemRef
+        required: false
+      underlyingAlarm:
+        type: array
+        items:
+          type: ResourceAlarmRef
+        required: false
+      relatedEvent:
+        type: array
+        items:
+          type: EventRef
+        required: false
+      impactPatterns:
+        type: ImpactPattern
+        required: false
+      parentProblem:
+        type: array
+        items:
+          type: RelatedServiceProblemRef
+        required: false
+      affectedLocation:
+        type: array
+        items:
+          type: Place
+        required: false
+      comment:
+        type: array
+        items:
+          type: Comment
+        required: false
+      relatedObject:
+        type: array
+        items:
+          type: RelatedObjectRef
+        required: false
+      '@type':
+        description: The class type of the actual resource (for type extension).
+        type: string
+        required: false
+      '@schemaLocation':
+        description: A link to the schema describing a resource (for type extension).
+        type: string
+        required: false
+      '@baseType':
+        description: The base type for use in polymorphic collections
+        type: string
+        required: false
+  ServiceProblem_Update:
+    description: |-
+      The problem information for Middle B which is abstracted in the service layer from the issued event information by First B
+      Skipped properties: id,href,id,correlationId,originatingSystem,href,firstAlert,timeRaised,trackingRecord
+    type: object
+    properties:
+      affectingServiceNumber:
+        description: Number of affected services
+        type: integer
+      category:
+        description: 'Classifier for the problem. Settable. For example, this is used for distinguish the category of problem originator in [role].[category] format. Example: serviceProvider.declarer, supplier.originated, system.originated'
+        type: string
+      description:
+        description: Free form text describing the Service Problem
+        type: string
+      impactImportanceFactor:
+        description: 'Impact Importance is characterized by an Impact Importance Factor: overall importance of the impact of all the affected services, e.g. 0 (zero impact) to 100 (worst impact). The Impact Importance is a calculated field which is set by the OSS determining the impact.'
+        type: string
+      priority:
+        description: An indication varying from 1(highest) to 10(lowest) of how important it is for the service provider to correct the Service Problem.
+        type: integer
+      problemEscalation:
+        description: 'Indicates if this service problem has been escalated or not. Possible values are 0 to 10. A value of zero means no escalation. The meanings of values 1-10 are to be determined by the user of the interface, but they show increasing levels of escalation.'
+        type: string
+      reason:
+        description: Free text or optionally structured text. It can be Unknown.
+        type: string
+      resolutionDate:
+        description: Time the problem was resolved
+        type: datetime
+      status:
+        description: 'The current status of the service problem. Possible values are Submitted, Rejected, Acknowledged, In Progress [Held, Pending], Resolved, Closed, and Cancelled.'
+        type: string
+      statusChangeDate:
+        description: Time the problem was last status changed
+        type: datetime
+      statusChangeReason:
+        description: The reason of state change
+        type: string
+      timeChanged:
+        description: Time the problem was last changed
+        type: datetime
+      extensionInfo:
+        description: A generic list of any type of elements. Used for vendor Extensions or loose element encapsulation from other namespaces
+        type: array
+        items:
+          type: ExtensionInfo
+      relatedParty:
+        type: array
+        items:
+          type: RelatedPartyRef
+      underlyingProblem:
+        type: array
+        items:
+          type: RelatedServiceProblemRef
+      underlyingAlarm:
+        type: array
+        items:
+          type: ResourceAlarmRef
+      relatedEvent:
+        type: array
+        items:
+          type: EventRef
+      impactPatterns:
+        type: ImpactPattern
+      parentProblem:
+        type: array
+        items:
+          type: RelatedServiceProblemRef
+      affectedLocation:
+        type: array
+        items:
+          type: Place
+      comment:
+        type: array
+        items:
+          type: Comment
+      relatedObject:
+        type: array
+        items:
+          type: RelatedObjectRef
+      '@type':
+        description: The class type of the actual resource (for type extension).
+        type: string
+      '@schemaLocation':
+        description: A link to the schema describing a resource (for type extension).
+        type: string
+      '@baseType':
+        description: The base type for use in polymorphic collections
+        type: string
+  TrackingRecord:
+    description: Tracking records allow the tracking of modifications on the problem.The tracking records should not be embedded in the problem to allow retrieving the problem without the tracking records.
+    type: object
+    properties:
+      description:
+        description: 'Describes the action being done (ack,clear...)'
+        type: string
+      id:
+        description: Identifier of the TrackingRecord
+        type: string
+        required: false
+      systemId:
+        description: Describes the system Id from which the action was done.
+        type: string
+        required: false
+      time:
+        description: Describes the time at which the action was done
+        type: datetime
+        required: false
+      user:
+        description: Describes  the user doing the action.
+        type: string
+        required: false
+      extensionInfo:
+        description: A generic list of any type of elements. Used for vendor Extensions or loose element encapsulation from other namespaces
+        type: array
+        items:
+          type: ExtensionInfo
+        required: false
+      '@type':
+        description: The class type of the actual resource (for type extension).
+        type: string
+        required: false
+      '@schemaLocation':
+        description: A link to the schema describing a resource (for type extension).
+        type: string
+        required: false
+      '@baseType':
+        description: The base type for use in polymorphic collections
+        type: string
+        required: false
+  FirstAlert:
+    description: 'Indicates what first alerted the system to the problem. It is not the root cause of the Service Problem. Examples: Threshold crossing alert'
+    type: object
+    properties:
+      href:
+        description: Reference of the object
+        type: string
+      id:
+        description: Unique identifier of the object
+        type: string
+      type:
+        description: Type of the object
+        type: string
+      '@type':
+        description: The class type of the actual resource (for type extension).
+        type: string
+  ExtensionInfo:
+    description: A generic list of any type of elements. Used for vendor extensions or loose element encapsulation from other namespaces.
+    type: object
+    properties:
+      name:
+        description: Name of the attribute
+        type: string
+      value:
+        description: Value of the attribute
+        type: string
+      '@type':
+        description: The class type of the actual resource (for type extension).
+        type: string
+  RelatedPartyRef:
+    description: RelatedParty reference. A related party defines party or party role linked to a specific entity.
+    type: object
+    properties:
+      href:
+        description: 'Reference of the related party, could be a party reference or a party role reference'
+        type: string
+      id:
+        description: Unique identifier of a related party
+        type: string
+      name:
+        description: Name of the related party
+        type: string
+        required: false
+      role:
+        description: Role of the related party.
+        type: string
+        required: false
+      '@referredType':
+        description: The actual type of the target instance when needed for disambiguation.
+        type: string
+        required: false
+  RelatedServiceProblemRef:
+    type: object
+    properties:
+      correlationId:
+        description: Additional identifier coming from an external system
+        type: string
+      href:
+        description: Reference of the Problem
+        type: string
+      id:
+        description: Unique identifier of the Problem
+        type: string
+      '@referredType':
+        description: The actual type of the target instance when needed for disambiguation.
+        type: string
+  ResourceAlarmRef:
+    description: A set of alarm ids identifying the alarms that are underlying this problem.
+    type: object
+    properties:
+      href:
+        description: Reference of the Alarm
+        type: string
+      id:
+        description: Unique identifier of the Alarm
+        type: string
+      changeRequest:
+        type: ChangeRequestRef
+      '@referredType':
+        description: The actual type of the target instance when needed for disambiguation.
+        type: string
+  EventRef:
+    description: Events linked with service problem
+    type: object
+    properties:
+      eventTime:
+        description: Time the event occurred
+        type: datetime
+      eventType:
+        description: Type of the event
+        type: string
+      href:
+        description: event reference
+        type: string
+      id:
+        description: ID of the event
+        type: string
+      '@referredType':
+        description: The actual type of the target instance when needed for disambiguation.
+        type: string
+  ImpactPattern:
+    description: Define the patterns of impact (optional)- e.g. other service characteristics- Used when defining impact through another pattern than the pre-defined attributes.
+    type: object
+    properties:
+      description:
+        description: Basic description of the impact pattern
+        type: string
+      extensionInfo:
+        description: A generic list of any type of elements. Used for vendor Extensions or loose element encapsulation from other namespaces
+        type: array
+        items:
+          type: ExtensionInfo
+      '@type':
+        description: The class type of the actual resource (for type extension).
+        type: string
+  Place:
+    description: Place reference. Place defines the places where the products are sold or delivered.
+    type: object
+    properties:
+      href:
+        description: Unique reference of the place
+        type: string
+      id:
+        description: Unique identifier of the place
+        type: string
+      name:
+        description: 'A user-friendly name for the place, such as "Paris Store", "London Store", "Main Home"'
+        type: string
+      role:
+        description: 'Role of the place (for instance: ''home delivery'', ''shop retrieval'')'
+        type: string
+      '@type':
+        description: The class type of the actual resource (for type extension).
+        type: string
+  Comment:
+    description: 'Comments on problem, as a list of comments'
+    type: object
+    properties:
+      comment:
+        description: Text of the comment
+        type: string
+      systemId:
+        description: Describes the system id from which the action was done
+        type: string
+      time:
+        description: Describes the time at which the action was done
+        type: datetime
+      user:
+        description: Describes the user doing the action
+        type: string
+      '@type':
+        description: The class type of the actual resource (for type extension).
+        type: string
+  RelatedObjectRef:
+    description: Objects linked with service problem
+    type: object
+    properties:
+      href:
+        description: Reference of the object
+        type: string
+      id:
+        description: Unique identifier of the object
+        type: string
+      type:
+        description: Type of the object
+        type: string
+      '@referredType':
+        description: The actual type of the target instance when needed for disambiguation.
+        type: string
+  ChangeRequestRef:
+    description: Reference to a Change Request
+    type: object
+    properties:
+      href:
+        description: The reference link to the change request
+        type: string
+      id:
+        description: The identifier of the change request
+        type: string
+      '@referredType':
+        description: The actual type of the target instance when needed for disambiguation.
+        type: string
+  EventSubscription:
+    properties:
+      id:
+        description: Id of the listener
+        type: string
+      callback:
+        description: The callback being registered.
+        type: string
+      query:
+        description: additional data to be passed
+        type: string
+        required: false
+  EventSubscriptionInput:
+    properties:
+      callback:
+        description: The callback being registered.
+        type: string
+      query:
+        description: additional data to be passed
+        type: string
+        required: false
+  Error:
+    properties:
+      code:
+        description: Application related code.
+        type: integer
+      reason:
+        description: Text that explains the reason for error.
+        type: integer
+      message:
+        description: (optional) Text that provide more details and corrective actions related to the error.
+        type: string
+        required: false
+      status:
+        description: (optional) http error code extension like 400-2
+        type: integer
+        required: false
+      referenceError:
+        description: (optional) A URL to online documentation that provides more information about the error.
+        type: string
+        required: false
+      '@type':
+        description: (optional) The class type of a REST resource.
+        type: string
+        required: false
+      '@schemaLocation':
+        description: (optional) A link to the schema describing a REST resource.
+        type: string
+        required: false
+annotationTypes:
+  oas-body-name:
+    type: string
+    allowedTargets: TypeDeclaration
+  oas-summary:
+    type: string
+    allowedTargets: Method
+  oas-tags:
+    type: 'string[]'
+    allowedTargets: Method
