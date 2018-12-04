@@ -24,7 +24,7 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 					<munit-tools:with-attribute attributeName="name" whereValue="getAllNetworkServiceByFilter" />
 				</munit-tools:with-attributes>
 				<munit-tools:then-return >
-					<munit-tools:payload value="#[vars.expectedGetAllNetworkServicesResponse]" mediaType="application/json" />
+					<munit-tools:payload value="#[vars.expectedGetAllNetworkServicesResponse]" mediaType="application/json"/>
 				</munit-tools:then-return>
 			</munit-tools:mock-when>
 		</munit:behavior>

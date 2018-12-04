@@ -24,12 +24,14 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 					<munit-tools:with-attribute attributeName="name" whereValue="getNetworkServiceById" />
 				</munit-tools:with-attributes>
 				<munit-tools:then-return >
-					<munit-tools:payload value="#[vars.expectedGetByIdNetworkServiceResponse]" mediaType="application/json" />
+					<munit-tools:payload value="#[vars.expectedGetByIdNetworkServiceResponse]" mediaType="application/json"/>
 				</munit-tools:then-return>
 			</munit-tools:mock-when>
 		</munit:behavior>
 		<munit:execution >
 			<flow-ref doc:name="requestHTTPGETNetworkServiceById" doc:id="6f5a0cee-43b9-4952-aa2b-acdca1f52886" name="requestHTTPGETNetworkServiceById" />
+			<logger level="INFO" doc:name="Logger" doc:id="7da295c2-04c6-4baa-ab0c-6b2f7a29bf2c" message="&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;Response: #[payload]"/>
+
 </munit:execution>
 		<munit:validation >
 			<munit-tools:assert-that doc:name="Assert that Response Message is Not Null" doc:id="25a2acdf-77ac-4d06-b54b-906e0452f48a" expression="#[payload]" is="#[MunitTools::notNullValue()]" message="Response Message is Null!!" />
