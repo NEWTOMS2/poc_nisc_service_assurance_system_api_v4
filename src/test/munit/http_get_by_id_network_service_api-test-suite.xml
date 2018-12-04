@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<munit:config name="http_get_by_id_network_service_api-test-suite.xml" />
+	<munit:before-test name="http_get_by_id_network_service_api-test-suiteBefore_Test" description="Before tests actions" doc:id="c7c8c46f-a10d-4b99-8a71-123dcec0eab2" >
+		<flow-ref doc:name="setExpectedGetByIdNetworkServiceResponse" doc:id="40a1b9b6-e610-47e0-9a16-e9576a6da4a4" name="setExpectedGetByIdNetworkServiceResponse"/>
+	</munit:before-test>
+	<munit:test name="FuntionalTest-GivenARequestWhenGetByIdANetworkServiceInfoThenReturnAValidResponse" description="FuntionalTest-GivenARequestWhenGetByIdANetworkServiceInfoThenReturnAValidResponse" doc:id="5742c4c5-5d1c-4648-8f28-a8a05d56b383">
+		<munit:enable-flow-sources >
+			<munit:enable-flow-source value="poc_nisc_service_assurance_system_api_v4-main" />
+			<munit:enable-flow-source value="get:\network\service\(id):poc_nisc_service_assurance_system_api_v4-config" />
+		</munit:enable-flow-sources>
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when call getNetworkServiceById" doc:id="53bc9ad4-1c58-43fe-9a6f-e4ef8077deb8" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="getNetworkServiceById" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[vars.expectedGetByIdNetworkServiceResponse]" mediaType="application/json" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="requestHTTPGETNetworkServiceById" doc:id="6f5a0cee-43b9-4952-aa2b-acdca1f52886" name="requestHTTPGETNetworkServiceById" />
+</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that Response Message is Not Null" doc:id="25a2acdf-77ac-4d06-b54b-906e0452f48a" expression="#[payload]" is="#[MunitTools::notNullValue()]" message="Response Message is Null!!" />
+			<munit-tools:assert-that doc:name="Assert that Response Message is the expected Message" doc:id="7ecb5e61-02f7-46fe-bb48-24887e6f0e29" expression="#[payload]" is="#[MunitTools::equalTo(vars.expectedGetByIdNetworkServiceResponse default '')]" message="Response Message is Null!!" />
+</munit:validation>
+	</munit:test>
+	<munit:test name="FuntionalTest-GivenARequestWhenGetByIdANetworkServiceInfoThenReturnAHTTPSTATUS200" description="FuntionalTest-GivenARequestWhenGetByIdANetworkServiceInfoThenReturnAHTTPSTATUS200" doc:id="0da58e34-8c9b-4591-8882-69a3b959255f">
+		<munit:enable-flow-sources >
+			<munit:enable-flow-source value="poc_nisc_service_assurance_system_api_v4-main" />
+			<munit:enable-flow-source value="get:\network\service\(id):poc_nisc_service_assurance_system_api_v4-config" />
+		</munit:enable-flow-sources>
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when call getNetworkServiceById" doc:id="befc9d5b-edd7-4aab-9ccb-e3fde3c9fb4c" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="getNetworkServiceById" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[vars.expectedGetByIdNetworkServiceResponse]" mediaType="application/json" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		
+</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="requestHTTPGETNetworkServiceById" doc:id="8b982ae2-15b4-4546-95df-ca404f6ab195" name="requestHTTPGETNetworkServiceById" />
+
+</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that Http Status Code is the expected" doc:id="87428a7f-1ae0-4377-85b0-d381401fa641" expression="#[attributes.statusCode]" is="#[MunitTools::equalTo(200 default 200)]" message="Http Status Code is not the expected!!!" />
+			<munit-tools:assert-that doc:name="Assert that Http Reason Phrase is the expected" doc:id="3715198d-4220-47a5-85aa-2538d3ff0342" expression="#[attributes.reasonPhrase]" is="#[MunitTools::equalTo('OK' default '')]" message="Http Status Code is not the expected!!!" />
+</munit:validation>
+	</munit:test>
+	<munit:test name="FuntionalTest-GivenARequestWhenGetByIdANetworkServiceInfoThenReturnExpectedContentType" description="FuntionalTest-GivenARequestWhenGetByIdANetworkServiceInfoThenReturnExpectedContentType" doc:id="a00d3eb7-accf-45c0-bb5e-87fd5c7301fb">
+		<munit:enable-flow-sources >
+			<munit:enable-flow-source value="poc_nisc_service_assurance_system_api_v4-main" />
+			<munit:enable-flow-source value="get:\network\service\(id):poc_nisc_service_assurance_system_api_v4-config" />
+		</munit:enable-flow-sources>
+		<munit:behavior>
+			<munit-tools:mock-when doc:name="Mock when call getNetworkServiceById" doc:id="ae61edde-7d99-4b2d-8c21-bf28737a3446" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="getNetworkServiceById" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[vars.expectedGetByIdNetworkServiceResponse]" mediaType="application/json"/>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		
+</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="requestHTTPGETNetworkServiceById" doc:id="7e21346c-adc2-4e51-a565-5e92366b4d5f" name="requestHTTPGETNetworkServiceById" />
+			<logger level="INFO" doc:name="Logger" doc:id="23c9c416-82e7-48fd-ada0-472a97393c2a" message="#[message]"/>
+
+</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that Http Content Type is the expected" doc:id="ce1f83d7-def9-4d77-a791-38a7eb3c2441" expression="#[attributes.headers.'content-type']" is="#[MunitTools::equalTo('application/json' default '')]" message="Http Content Type is not the expected!!!" />
+</munit:validation>
+	</munit:test>
+	<munit:test name="FuntionalTest-GivenARequestWhenGetByIdANetworkServiceInfoThenVerifyThatTheRequestWasRoutedToRigthImplementation" description="FuntionalTest-GivenARequestWhenGetByIdANetworkServiceInfoThenVerifyThatTheRequestWasRoutedToRigthImplementation" doc:id="1da27946-77be-41fe-94f9-6a73f923654d">
+		<munit:enable-flow-sources >
+			<munit:enable-flow-source value="poc_nisc_service_assurance_system_api_v4-main" />
+			<munit:enable-flow-source value="get:\network\service\(id):poc_nisc_service_assurance_system_api_v4-config" />
+		</munit:enable-flow-sources>
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when call getNetworkServiceById" doc:id="990bb9b6-8626-4b22-a35b-b265330ea88b" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="getNetworkServiceById" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[vars.expectedGetByIdNetworkServiceResponse]" mediaType="application/json" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		
+</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="requestHTTPGETNetworkServiceById" doc:id="2ef6caf9-3dde-4d88-a02c-fc7f5ff756d1" name="requestHTTPGETNetworkServiceById" />
+
+</munit:execution>
+		<munit:validation >
+			<munit-tools:verify-call doc:name="Verify call" doc:id="2b116e4b-2c7d-4216-b28c-fa9ffa8a8a8c" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="getNetworkServiceById" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+
+</munit:validation>
+	</munit:test>
+	<munit:test name="FuntionalTest-GivenARequestWhenGetByIdAServiceOrderThenGetIdFromURI" description="FuntionalTest-GivenARequestWhenGetByIdAServiceOrderThenGetIdFromURI" doc:id="b5d73474-ca20-458c-9fbe-3b43e08299d0">
+		<munit:enable-flow-sources >
+			<munit:enable-flow-source value="poc_nisc_service_assurance_system_api_v4-main" />
+			<munit:enable-flow-source value="get:\network\service\(id):poc_nisc_service_assurance_system_api_v4-config" />
+		</munit:enable-flow-sources>
+		<munit:behavior >
+			<munit-tools:spy doc:name="Spy Call getNetworkServiceById" doc:id="89012257-b9c8-4639-ba90-f4c5e9398cd7" processor="mule:flow-ref">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="getNetworkServiceById" />
+				</munit-tools:with-attributes>
+				<munit-tools:before-call >
+					<munit-tools:assert-that doc:name="Assert that Http URI Id Param is the expected" doc:id="bdc0aaa3-9806-4750-8eb7-5f2ef77db7af" expression="#[vars.id]" is="#[MunitTools::equalTo('1' default '0')]" message="Http URI Id Param is not the expected!!!" />
+				</munit-tools:before-call>
+			</munit-tools:spy>
+			<munit-tools:mock-when doc:name="Mock when call getNetworkServiceById" doc:id="59a2bd8b-ae21-4742-8575-fd433005b637" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="getNetworkServiceById" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[vars.expectedGetByIdNetworkServiceResponse]" mediaType="application/json" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		
+
+</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="requestHTTPGETNetworkServiceById" doc:id="420b43f8-024c-4430-bd11-239b022e0ba8" name="requestHTTPGETNetworkServiceById" />
+
+</munit:execution>
+		<munit:validation >
+			<munit-tools:verify-call doc:name="Verify call" doc:id="d16c7835-7a37-4577-9bf8-1621eebb1b42" processor="mule:flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="name" whereValue="getServiceIdFromUri" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+
+</munit:validation>
+	</munit:test>
+	<sub-flow name="requestHTTPGETNetworkServiceById" doc:id="7e9979ed-07a8-40df-9bb6-ac50e25a49cb" >
+		<http:request method="GET" doc:name="HTTP-GET-NetworkServiceById" doc:id="ecf1a8f1-d869-43cd-bf66-e30ce0523e6e" config-ref="HTTP_API_TEST_Request_configuration" path="/network/service/{id}">
+			<http:uri-params><![CDATA[#[output application/java
+---
+{
+	"id" : "1"
+}]]]></http:uri-params>
+			<http:response-validator>
+				<http:success-status-code-validator values="200" />
+				</http:response-validator>
+			</http:request>
+	</sub-flow>
+</mule>
