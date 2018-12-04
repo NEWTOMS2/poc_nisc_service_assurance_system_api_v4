@@ -5,7 +5,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
 	<sub-flow name="getNetworkServiceById" doc:id="1779e679-d764-4ab6-b8fe-22ca974d27ae" >
-		<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+		<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="adfeed6e-6644-495b-a1c0-cc23d6b961f5">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/json
@@ -26,7 +26,7 @@ output application/json
   statusChangeReason: "problem analysis has been completed in NP1",
   resolutionDate: "2016-07-20T00:00:00Z",
   status: "resolved",
-  reason: "Failure of resource â€˜NP1_Resource_1â€™ in NP1",
+  reason: "Failure of resource NP1_Resource_1 in NP1",
   firstAlert: {
     "type": "Trouble Ticket",
     id: "NP1_TT_0000000",
@@ -186,7 +186,7 @@ output application/json
         </ee:transform>
 	</sub-flow>
 	<sub-flow name="getAllNetworkServiceByFilter" doc:id="d326d19b-26b2-4ef6-9202-15ac43f4f647" >
-		<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+		<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="0951425b-c77a-487a-bdb8-3001bf7c12a9">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/json
@@ -208,7 +208,7 @@ output application/json
     statusChangeReason: "problem analysis has been completed in NP1",
     resolutionDate: "2016-07-20T00:00:00Z",
     status: "resolved",
-    reason: "Failure of resource â€˜NP1_Resource_1â€™ in NP1",
+    reason: "Failure of resource NP1_Resource_1 in NP1",
     firstAlert: {
       "type": "Trouble Ticket",
       id: "NP1_TT_0000000",

@@ -8,6 +8,10 @@
 		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
 		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
 	<munit:config name="poc_nisc_service_assurance_system_api_v4-test-suite.xml" />
+	<munit:before-test name="poc_nisc_service_assurance_system_api_v4-test-suiteBefore_Test" description="Before tests actions" doc:id="b79c831d-95a9-43a0-b41c-ff28e0e5ddb5" >
+		<flow-ref doc:name="setExpectedGetAllNetworkServicesResponse" doc:id="659b8b4c-b528-4491-8457-aa119b714995" name="setExpectedGetAllNetworkServicesResponse" />
+		<flow-ref doc:name="setExpectedGetByIdNetworkServiceResponse" doc:id="0ac7ac1a-57d0-4fee-93f5-8a7ff56deeb9" name="setExpectedGetByIdNetworkServiceResponse" />
+	</munit:before-test>
 	<munit:test name="poc_nisc_service_assurance_system_api_v4-test-suite-get:\network\service:poc_nisc_service_assurance_system_api_v4-configTest" description="Test" doc:id="149b6622-1c7f-4d82-9738-0a24d926c0bc" >
 		<munit:behavior >
 			<munit-tools:mock-when doc:name="Mock when call getAllNetworkServiceByFilter" doc:id="25aef75e-634c-41ec-9095-ca472f35d619" processor="mule:flow-ref" >
