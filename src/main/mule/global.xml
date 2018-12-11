@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+	<global-property doc:name="Global Property" doc:id="09ba4dd7-fadc-489a-96c5-a17533b73369" name="mule.env" value="dev" />
+	<configuration-properties doc:name="Configuration properties" doc:id="900b6489-24b5-4526-9a91-01200cbc26b1" file="mule-app-${mule.env}.properties" />
+</mule>

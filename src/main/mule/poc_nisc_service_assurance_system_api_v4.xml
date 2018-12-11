@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd ">
-    <http:listener-config name="poc_nisc_service_assurance_system_api_v4-httpListenerConfig">
-        <http:listener-connection host="0.0.0.0" port="8081" />
-    </http:listener-config>
-    <apikit:config name="poc_nisc_service_assurance_system_api_v4-config" raml="poc_nisc_service_assurance_system_api_v4.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
-    <flow name="poc_nisc_service_assurance_system_api_v4-main">
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="poc_nisc_service_assurance_system_api_v4-main">
         <http:listener config-ref="poc_nisc_service_assurance_system_api_v4-httpListenerConfig" path="/api/*">
             <http:response statusCode="#[vars.httpStatus default 200]">
                 <http:headers>#[vars.outboundHeaders default {}]</http:headers>
@@ -17,479 +14,150 @@
         <apikit:router config-ref="poc_nisc_service_assurance_system_api_v4-config" />
         <error-handler>
             <on-error-propagate type="APIKIT:BAD_REQUEST">
-                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="f2e46917-a15f-44e9-9d7b-9f1615144090">
                     <ee:message>
                         <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
-{message: "Bad request"}]]></ee:set-payload>
+{
+   error:{
+      errors:[
+         {
+            id:"400",
+            code:"ERR400",
+            status:"400",
+            title:"Bad Request",
+            detail:"The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            href:"https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html"
+         }
+      ]
+   }
+}]]></ee:set-payload>
                     </ee:message>
                     <ee:variables>
-                        <ee:set-variable variableName="httpStatus">400</ee:set-variable>
+                        <ee:set-variable variableName="httpStatus"><![CDATA[400]]></ee:set-variable>
                     </ee:variables>
                 </ee:transform>
             </on-error-propagate>
             <on-error-propagate type="APIKIT:NOT_FOUND">
-                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="3566a0a7-6381-4c28-98db-ad73d04d2738">
                     <ee:message>
                         <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
-{message: "Resource not found"}]]></ee:set-payload>
+{
+   error:{
+      errors:[
+         {
+            id:"404",
+            code:"ERR404",
+            status:"404",
+            title:"Not Found",
+            detail:"The server has not found anything matching the Request-URI.",
+            href:"https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html"
+         }
+      ]
+   }
+}]]></ee:set-payload>
                     </ee:message>
                     <ee:variables>
-                        <ee:set-variable variableName="httpStatus">404</ee:set-variable>
+                        <ee:set-variable variableName="httpStatus"><![CDATA[404]]></ee:set-variable>
                     </ee:variables>
                 </ee:transform>
             </on-error-propagate>
             <on-error-propagate type="APIKIT:METHOD_NOT_ALLOWED">
-                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="764bd198-1998-4cd9-9e31-b02a15a24f86">
                     <ee:message>
                         <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
-{message: "Method not allowed"}]]></ee:set-payload>
+{
+   error:{
+      errors:[
+         {
+            id:"405",
+            code:"ERR405",
+            status:"405",
+            title:"Method Not Allowed",
+            detail:"The method specified in the Request-Line is not allowed for the resource identified by the Request-URI. The response MUST include an Allow header containing a list of valid methods for the requested resource.",
+            href:"https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html"
+         }
+      ]
+   }
+}]]></ee:set-payload>
                     </ee:message>
                     <ee:variables>
-                        <ee:set-variable variableName="httpStatus">405</ee:set-variable>
+                        <ee:set-variable variableName="httpStatus"><![CDATA[405]]></ee:set-variable>
                     </ee:variables>
                 </ee:transform>
             </on-error-propagate>
             <on-error-propagate type="APIKIT:NOT_ACCEPTABLE">
-                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="3f6d0c2b-3987-4715-ae50-27dda1df525c">
                     <ee:message>
                         <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
-{message: "Not acceptable"}]]></ee:set-payload>
+{
+   error:{
+      errors:[
+         {
+            id:"406",
+            code:"ERR406",
+            status:"406",
+            title:"Not Acceptable",
+            detail:"The resource identified by the request is only capable of generating response entities which have content characteristics not acceptable according to the accept headers sent in the request.",
+            href:"https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html"
+         }
+      ]
+   }
+}]]></ee:set-payload>
                     </ee:message>
                     <ee:variables>
-                        <ee:set-variable variableName="httpStatus">406</ee:set-variable>
+                        <ee:set-variable variableName="httpStatus"><![CDATA[406]]></ee:set-variable>
                     </ee:variables>
                 </ee:transform>
             </on-error-propagate>
-            <on-error-propagate type="APIKIT:UNSUPPORTED_MEDIA_TYPE">
-                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+            <on-error-propagate type="ANY" enableNotifications="true" logException="true">
+                <logger level="ERROR" doc:name="Logger" doc:id="fb308eb0-6f3c-45eb-a5ca-5f3f05cb52bd" message="CHECK: #[error]"/>
+				<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="de4d6431-b27c-4521-9ae6-613bad3e2cee">
                     <ee:message>
                         <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
-{message: "Unsupported media type"}]]></ee:set-payload>
+{
+   error:{
+      errors:[
+         {
+            id:"500",
+            code:"ERR500",
+            status:"500",
+            title:"Internal Server Error",
+            detail:error.detailedDescription,
+            href:"https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html"
+         }
+      ]
+   }
+}]]></ee:set-payload>
                     </ee:message>
                     <ee:variables>
-                        <ee:set-variable variableName="httpStatus">415</ee:set-variable>
-                    </ee:variables>
-                </ee:transform>
-            </on-error-propagate>
-            <on-error-propagate type="APIKIT:NOT_IMPLEMENTED">
-                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-                    <ee:message>
-                        <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{message: "Not Implemented"}]]></ee:set-payload>
-                    </ee:message>
-                    <ee:variables>
-                        <ee:set-variable variableName="httpStatus">501</ee:set-variable>
-                    </ee:variables>
-                </ee:transform>
-            </on-error-propagate>
-        </error-handler>
-    </flow>
-    <flow name="poc_nisc_service_assurance_system_api_v4-console">
-        <http:listener config-ref="poc_nisc_service_assurance_system_api_v4-httpListenerConfig" path="/console/*">
-            <http:response statusCode="#[vars.httpStatus default 200]">
-                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
-            </http:response>
-            <http:error-response statusCode="#[vars.httpStatus default 500]">
-                <http:body>#[payload]</http:body>
-                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
-            </http:error-response>
-        </http:listener>
-        <apikit:console config-ref="poc_nisc_service_assurance_system_api_v4-config" />
-        <error-handler>
-            <on-error-propagate type="APIKIT:NOT_FOUND">
-                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-                    <ee:message>
-                        <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{message: "Resource not found"}]]></ee:set-payload>
-                    </ee:message>
-                    <ee:variables>
-                        <ee:set-variable variableName="httpStatus">404</ee:set-variable>
+                        <ee:set-variable variableName="httpStatus"><![CDATA[500]]></ee:set-variable>
                     </ee:variables>
                 </ee:transform>
             </on-error-propagate>
         </error-handler>
     </flow>
     <flow name="get:\network\service:poc_nisc_service_assurance_system_api_v4-config">
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-[
-  {
-    id: "problemxxxx0000",
-    correlationId: "xxxxxx",
-    originatingSystem: "System_001",
-    category: "supplier.originated",
-    href: "http://api/serviceProblem/problemxxxx0000",
-    impactImportanceFactor: "0",
-    priority: 1,
-    description: "connection failure between Tokyo and Osaka",
-    problemEscalation: "0",
-    timeRaised: "2016-07-20T00:00:00Z",
-    timeChanged: "2016-07-20T00:00:00Z",
-    statusChangeDate: "2016-07-20T00:00:00Z",
-    statusChangeReason: "problem analysis has been completed in NP1",
-    resolutionDate: "2016-07-20T00:00:00Z",
-    status: "resolved",
-    reason: "Failure of resource â€˜NP1_Resource_1â€™ in NP1",
-    firstAlert: {
-      "type": "Trouble Ticket",
-      id: "NP1_TT_0000000",
-      href: "http://api/troubletiket/NP1_TT_000000",
-      "@type": "Trouble Ticket"
-    },
-    relatedParty: [
-      {
-        role: "Network Provider",
-        id: "NP1",
-        href: "http://api/party/NP1"
-      }, 
-      {
-        role: "Service Provider",
-        id: "SP1",
-        href: "http://api/party/SP1"
-      }, 
-      {
-        role: "Service Provider",
-        id: "SP3",
-        href: "http://api/party/SP3"
-      }
-    ],
-    affectedLocation: [
-      {
-        id: "Loc000000",
-        href: "http://api/location/Loc000000/",
-        name: "string",
-        role: "string",
-        "@type": "string"
-      }, 
-      {
-        id: "Loc000001",
-        href: "http://api/location/Loc000001/",
-        name: "string",
-        role: "string",
-        "@type": "string"
-      }
-    ],
-    underlyingAlarm: [
-      {
-        id: "NP1_A_0000000",
-        href: "http://api/alarm/NP1_A_000000",
-        changeRequest: {
-          href: "string",
-          id: "string",
-          "@referredType": "string"
-        },
-        "@referredType": "string"
-      }
-    ],
-    relatedEvent: [
-      {
-        eventType: "prediction",
-        eventTime: "2014-12-20T17:00:00Z",
-        href: "http://api/event/prediction_0001",
-        id: "prediction_0001",
-        "@referredType": "string"
-      }
-    ],
-    relatedObject: [
-      {
-        id: "product0001",
-        href: "http://api/productinventory/product0001",
-        "type": "string",
-        "@referredType": "string"
-      }
-    ],
-    parentProblem: [
-      {
-        id: "problemxxxx0001",
-        correlationId: "xxxxxxxx",
-        href: "http://api/serviceproblem/problemxxxx0001",
-        "@referredType": "string"
-      }
-    ],
-    underlyingProblem: [
-      {
-        id: "problemxxxx0001",
-        correlationId: "xxxxxxxx",
-        href: "http://api/serviceproblem/problemxxxx0001",
-        "@referredType": "string"
-      }
-    ],
-    trackingRecord: [
-      {
-        description: "yyy cleared the problem",
-        id: "string",
-        systemId: "xxxx",
-        time: "2016-07-20T00:00:00Z",
-        user: "NP1",
-        extensionInfo: [
-          {
-            name: "string",
-            value: "string",
-            "@type": "string"
-          }
-        ],
-        "@type": "string",
-        "@schemaLocation": "string",
-        "@baseType": "string"
-      }
-    ],
-    comment: [
-      {
-        user: "SPM_handler_01",
-        time: "2016-07-20T00:00:00Z",
-        systemId: "System_002",
-        comment: "receive trouble ticket from NP1, and create this Service Problem",
-        "@type": "string"
-      }, 
-      {
-        user: "NP1",
-        time: "2016-07-20T00:00:00Z",
-        systemId: "System_002",
-        comment: "status changed to Progress-Held",
-        "@type": "string"
-      }
-    ],
-    impactPatterns: {
-      description: "string",
-      extensionInfo: [
-        {
-          name: "string",
-          value: "string",
-          "@type": "string"
-        }
-      ],
-      "@type": "string"
-    },
-    extensionInfo: [
-      {
-        name: "",
-        value: "",
-        "@type": "string"
-      }
-    ],
-    links: [
-      {
-        rel: "/linkrels/network/service/info",
-        uri: "/network/service/problemxxxx0000",
-        method: "GET"
-      }, 
-      {
-        rel: "/linkrels/network/service/updateInfo",
-        uri: "/network/service/problemxxxx0000",
-        method: "PUT"
-      }, 
-      {
-        rel: "/linkrels/network/service/delete",
-        uri: "/network/service/problemxxxx0000",
-        method: "DELETE"
-      }
-    ]
-  }
-]]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
+		<flow-ref doc:name="getAllNetworkServiceByFilter" doc:id="f72e73f4-3fa3-4f96-a9d2-bc27fa7e84ee" name="getAllNetworkServiceByFilter" />
     </flow>
     <flow name="get:\network\service\(id):poc_nisc_service_assurance_system_api_v4-config">
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core">
+		<flow-ref doc:name="getServiceIdFromUri" doc:id="a28d6e69-188d-45f5-9bfe-55f175927b22" name="getServiceIdFromUri" />
+		<flow-ref doc:name="getNetworkServiceById" doc:id="a8f8516e-1935-4bb2-8792-14c427f1bd5a" name="getNetworkServiceById" />
+    </flow>
+    <sub-flow name="getServiceIdFromUri" doc:id="ecb4277a-21f7-4662-bdda-2b8e7a5c7d4c" >
+		<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core">
             <ee:variables>
                 <ee:set-variable variableName="id">attributes.uriParams.id</ee:set-variable>
             </ee:variables>
         </ee:transform>
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-  id: "problemxxxx0000",
-  correlationId: "xxxxxx",
-  originatingSystem: "System_001",
-  category: "supplier.originated",
-  href: "http://api/serviceProblem/problemxxxx0000",
-  impactImportanceFactor: "0",
-  priority: 1,
-  description: "connection failure between Tokyo and Osaka",
-  problemEscalation: "0",
-  timeRaised: "2016-07-20T00:00:00Z",
-  timeChanged: "2016-07-20T00:00:00Z",
-  statusChangeDate: "2016-07-20T00:00:00Z",
-  statusChangeReason: "problem analysis has been completed in NP1",
-  resolutionDate: "2016-07-20T00:00:00Z",
-  status: "resolved",
-  reason: "Failure of resource â€˜NP1_Resource_1â€™ in NP1",
-  firstAlert: {
-    "type": "Trouble Ticket",
-    id: "NP1_TT_0000000",
-    href: "http://api/troubletiket/NP1_TT_000000",
-    "@type": "Trouble Ticket"
-  },
-  relatedParty: [
-    {
-      role: "Network Provider",
-      id: "NP1",
-      href: "http://api/party/NP1"
-    }, 
-    {
-      role: "Service Provider",
-      id: "SP1",
-      href: "http://api/party/SP1"
-    }, 
-    {
-      role: "Service Provider",
-      id: "SP3",
-      href: "http://api/party/SP3"
-    }
-  ],
-  affectedLocation: [
-    {
-      id: "Loc000000",
-      href: "http://api/location/Loc000000/",
-      name: "string",
-      role: "string",
-      "@type": "string"
-    }, 
-    {
-      id: "Loc000001",
-      href: "http://api/location/Loc000001/",
-      name: "string",
-      role: "string",
-      "@type": "string"
-    }
-  ],
-  underlyingAlarm: [
-    {
-      id: "NP1_A_0000000",
-      href: "http://api/alarm/NP1_A_000000",
-      changeRequest: {
-        href: "string",
-        id: "string",
-        "@referredType": "string"
-      },
-      "@referredType": "string"
-    }
-  ],
-  relatedEvent: [
-    {
-      eventType: "prediction",
-      eventTime: "2014-12-20T17:00:00Z",
-      href: "http://api/event/prediction_0001",
-      id: "prediction_0001",
-      "@referredType": "string"
-    }
-  ],
-  relatedObject: [
-    {
-      id: "product0001",
-      href: "http://api/productinventory/product0001",
-      "type": "string",
-      "@referredType": "string"
-    }
-  ],
-  parentProblem: [
-    {
-      id: "problemxxxx0001",
-      correlationId: "xxxxxxxx",
-      href: "http://api/serviceproblem/problemxxxx0001",
-      "@referredType": "string"
-    }
-  ],
-  underlyingProblem: [
-    {
-      id: "problemxxxx0001",
-      correlationId: "xxxxxxxx",
-      href: "http://api/serviceproblem/problemxxxx0001",
-      "@referredType": "string"
-    }
-  ],
-  trackingRecord: [
-    {
-      description: "yyy cleared the problem",
-      id: "string",
-      systemId: "xxxx",
-      time: "2016-07-20T00:00:00Z",
-      user: "NP1",
-      extensionInfo: [
-        {
-          name: "string",
-          value: "string",
-          "@type": "string"
-        }
-      ],
-      "@type": "string",
-      "@schemaLocation": "string",
-      "@baseType": "string"
-    }
-  ],
-  comment: [
-    {
-      user: "SPM_handler_01",
-      time: "2016-07-20T00:00:00Z",
-      systemId: "System_002",
-      comment: "receive trouble ticket from NP1, and create this Service Problem",
-      "@type": "string"
-    }, 
-    {
-      user: "NP1",
-      time: "2016-07-20T00:00:00Z",
-      systemId: "System_002",
-      comment: "status changed to Progress-Held",
-      "@type": "string"
-    }
-  ],
-  impactPatterns: {
-    description: "string",
-    extensionInfo: [
-      {
-        name: "string",
-        value: "string",
-        "@type": "string"
-      }
-    ],
-    "@type": "string"
-  },
-  extensionInfo: [
-    {
-      name: "",
-      value: "",
-      "@type": "string"
-    }
-  ],
-  links: [
-    {
-      rel: "/linkrels/network/service/info",
-      uri: "/network/service/problemxxxx0000",
-      method: "GET"
-    }, 
-    {
-      rel: "/linkrels/network/service/updateInfo",
-      uri: "/network/service/problemxxxx0000",
-      method: "PUT"
-    }, 
-    {
-      rel: "/linkrels/network/service/delete",
-      uri: "/network/service/problemxxxx0000",
-      method: "DELETE"
-    }
-  ]
-}]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
-    </flow>
+	</sub-flow>
 </mule>
